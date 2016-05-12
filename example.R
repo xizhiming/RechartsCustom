@@ -7,7 +7,18 @@ data_line_bar <- data.frame('日期'=c('3-1','3-2','3-3','3-4','3-5'),
                             '最高'=c(35,45,40,35,55),
                             '中间'=c(25,35,30,25,45),
                             '最低'=c(15,25,20,15,35))
-data_line_bar$日期 <- as.character(data_line_bar$日期)
+data_line_bar[,1] <- as.character(data_line_bar[,1])
+
+data_line_bar_2 <- data.frame('日期'=c('3-1','3-2','3-3','3-4','3-5'),
+                            '最高'=c(35,45,40,35,55)
+                            )
+data_line_bar_2[,1] <- as.character(data_line_bar_2[,1])
+
+data_line_bar_3 <- data.frame('日期'=c('3-1'),
+                            '最高'=c(35),
+                            '中间'=c(25),
+                            '最低'=c(15))
+data_line_bar_3[,1] <- as.character(data_line_bar_3[,1])
 #饼图数据
 data_pie <- data.frame('直接访问'=100,
                        'SEO'=200,
@@ -33,6 +44,24 @@ body <- dashboardBody(
                         series_rectangular(data_line_bar[,c(2,3,4)],type='line')
                         )
                ),
+  echarts_plot(id="line-bar_2",height='400px',width='800px',
+               option=c(tooltip_fun(formatter="{b}:{c}"),
+                        legend_fun(data=colnames(data_line_bar_2)[2]),
+                        toolbox_fun(),
+                        xAxis_fun(data=data_line_bar_2[,1]),
+                        yAxis_fun(),
+                        series_rectangular(data.frame("最高"=data_line_bar_2[,2]),type='line')
+               )
+  ),
+  echarts_plot(id="line-bar_3",height='400px',width='800px',
+               option=c(tooltip_fun(formatter="{b}:{c}"),
+                        legend_fun(data=colnames(data_line_bar_3)[2:4]),
+                        toolbox_fun(),
+                        xAxis_fun(data=data_line_bar_3[,1]),
+                        yAxis_fun(),
+                        series_rectangular(data_line_bar_3[,2:4],type='line')
+               )
+  ),
   echarts_plot(id="pie",
                option=c(tooltip_fun(formatter="{b}:{c}({d}%)"),
                         series_pie(data_pie)
